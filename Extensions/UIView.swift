@@ -1,10 +1,38 @@
 import UIKit
 
 extension UIView {
+    func embedSubview(_ subview: UIView) {
+        if subview.superview == self {
+            return
+        }
+
+        if subview.superview != nil {
+            subview.removeFromSuperview()
+        }
+
+        addSubview(subview)
+        fill(with: subview)
+    }
+
+    func isContained(within other: UIView) -> Bool {
+        var current: UIView? = self
+
+        while let proposedView = current {
+            if proposedView == other {
+                return true
+            }
+
+            current = proposedView.superview
+        }
+
+        return false
+    }
+
     func fill(with view: UIView) {
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.frame = bounds
 
-        NSLayoutConstraint.active([
+        NSLayoutConstraint.activate([
             view.topAnchor.constraint(equalTo: topAnchor),
             view.leftAnchor.constraint(equalTo: leftAnchor),
             view.rightAnchor.constraint(equalTo: rightAnchor),
